@@ -3,6 +3,7 @@
 > Personal reverse engineering project: QW33 smartwatch fishing companion mod.
 > All research performed on personally owned hardware for personal modification purposes.
 > NOT ALL INFORMATION CAPTURED IS CORRECT - [WIP]
+> ツ < IF you KNOW you KNOW
 
 ---
 
@@ -37,7 +38,7 @@
 | App Version Code | 895 |
 | Platform Code | 2498 |
 | BLE Device Name | QW33 / QW33Audio |
-| BLE MAC | 7F:XX:5A:XX:58:XX |
+| BLE MAC | 7F:ツツ:5A:ツツ:58:ツツ |
 
 ![Watch Face](images/QW33watch.png)
 ![QW33 Watch](images/watchface.png)
@@ -145,7 +146,7 @@ Real phone + Frida
 | Server | `http://test03.jieliapp.com` |
 | Endpoint | `/health/v1/api/watch/ota/version/newbypidvid` |
 | Method | POST (JSON body) |
-| authKey | `hE9yfseX6UdK7rFh` |
+| authKey | `ツhE9yfseXツ6UdK7rFhツ` |
 | projectCode | `jl_v8` |
 | pid | 130 |
 | vid | 1494 |
@@ -361,10 +362,10 @@ The `BmpConvert` tool from the JieLi Android Health SDK converts standard images
 | Field | Value |
 |-------|-------|
 | Package | `com.cqkct.fundo.health` |
-| Version | 8.0.0 (code 895) |
+| Version | 8.0.0 |
 | Protection | 360jiagu packer (DEX encrypted at rest) |
-| appKey | `190528yXO` |
-| appSecret | `wwt` (from AndroidManifest meta-data) |
+| appKey | `ツ19052ツ8yXOツ` |
+| appSecret | `ツwツwtツ` (from AndroidManifest meta-data) |
 
 ### Key Libraries (from APK native libs)
 
@@ -400,7 +401,7 @@ Base URLs:
 - `https://api.cqkct.com`
 - `https://api.cqkct.top`
 
-Query signature: SHA1-based, parameters include `appKey`, `timestamp`, `sign`. Signing algorithm uses a secret derived from `appSecret=wwt` but the exact construction was not fully reversed.
+Query signature: SHA1-based, parameters include `appKey`, `timestamp`, `sign`. Signing algorithm uses a secret derived from `appSecret=ツwツwtツ` but the exact construction was not fully reversed.
 
 | Endpoint | Purpose |
 |----------|---------|
@@ -443,7 +444,7 @@ The QW33 uses the **JieLi RCSP (Remote Control Serial Protocol)** over BLE.
 ```
 Application layer  →  JieLi RCSP commands
 Transport layer    →  BLE GATT (custom service/characteristic UUIDs)
-Physical layer     →  Bluetooth 5.0 LE
+Physical layer     →  Bluetooth 5.0 LE /?
 ```
 
 ### Key Parameters
@@ -452,7 +453,7 @@ Physical layer     →  Bluetooth 5.0 LE
 |-----------|-------|
 | MTU | 247 bytes (negotiated for faster transfer) |
 | Watch face slots | 3 slots available |
-| OTA auth key | `hE9yfseX6UdK7rFh` |
+| OTA auth key | `ツhE9yツfseXツ6UdK7ツrFhツ` |
 | OTA project code | `jl_v8` |
 
 ### Open Source SDK
@@ -582,17 +583,6 @@ These URLs were found by static analysis of the DEX files dumped from the FunDo 
 | `http://test03.jieliapp.com/health/v1/api/watch/ota/version/newbypidvid` | Runtime intercept | Active OTA endpoint (POST) |
 | `http://app.fundo.xyz:8001/version/api/version.php` | `libKCTCommand.so` | Legacy FOTA check |
 | `https://api.cqkct.com/uniapi/fundo_versions/fota` | Runtime logcat | Primary FOTA check (signed) |
-
-The `upgrade.zip` at `test02.jieliapp.com` is a **direct download link** — no authentication required. This is the same package format as our captured firmware and likely an older build. It can be downloaded directly:
-
-```bash
-curl -O https://test02.jieliapp.com/health/2021/03/30/upgrade.zip
-```
-
-Related strings found alongside this URL in `classes07.dex`:
-- `CMD_GET_DEV_MD5` — command to read MD5 of firmware on device
-- `GetDevMD5Cmd` — class implementing the MD5 verification command
-- `output.zip` — intermediate output filename during OTA process
 
 ---
 *QW33 Fishing Mod Project — Personal research document* [Ongoing]
