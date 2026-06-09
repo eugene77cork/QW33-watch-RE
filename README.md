@@ -2,6 +2,7 @@
 
 > Personal reverse engineering project: QW33 smartwatch fishing companion mod.
 > All research performed on personally owned hardware for personal modification purposes.
+> NOT ALL INFORMATION CAPTURED IS CORRECT - [WIP]
 
 ---
 
