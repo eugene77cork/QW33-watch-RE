@@ -38,8 +38,8 @@
 | BLE Device Name | QW33 / QW33Audio |
 | BLE MAC | 7F:XX:5A:XX:58:XX |
 
-![Watch Face](images/QW33watch.webp)
-![QW33 Watch](images/watchface.webp)
+![Watch Face](images/QW33watch.png)
+![QW33 Watch](images/watchface.png)
 ---
 
 ## 2. Hardware
