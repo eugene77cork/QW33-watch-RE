@@ -36,7 +36,7 @@
 | App Version Code | 895 |
 | Platform Code | 2498 |
 | BLE Device Name | QW33 / QW33Audio |
-| BLE MAC | 7F:XX:5A:XX:58:XX |
+| BLE MAC | 7F:5B:5A:A9:58:BB |
 
 ---
 
@@ -101,16 +101,38 @@ FunOS is **not Linux** — it is a proprietary RTOS built on top of the JieLi SD
 
 ### Method
 
-Firmware was captured by hooking `JLOtaController` at runtime using Frida while FunDo Health was running on an Android emulator (LDPlayer x86_64). The OTA download URL was intercepted from the JieLi health server and the package downloaded directly.
+Firmware was obtained through a multi-step process:
+
+**Step 1 — Phone logcat (real device)**
+Connected the real phone with watch paired via ADB. Used `adb logcat | findstr fota` to capture the live FOTA API request made by FunDo Health when checking for updates. This revealed the signed endpoint at `https://api.cqkct.com/uniapi/fundo_versions/fota` with all query parameters including `adaptiveNumber=2498` and `deviceVersion=v0.1.3`.
+
+**Step 2 — Auth failed**
+Attempts to replay or spoof the signed request failed. The `sign` parameter is a SHA1-based HMAC tied to the timestamp and all query parameters. The signing secret (`appSecret=wwt` from AndroidManifest) was identified but the exact signing algorithm construction could not be fully reversed from static analysis alone. Replaying with a lower `deviceVersion` was therefore not possible without a valid sign.
+
+**Step 3 — DEX dump on emulator**
+FunDo Health APK is protected by 360jiagu packer — the real application DEX is encrypted at rest. To access the real code, the app was run on LDPlayer (x86_64 Android emulator) with root and SELinux disabled. `frida-dexdump` was used to dump 12 DEX files (44 MB total) from process memory after the jiagu runtime decrypted them.
+
+**Step 4 — Static analysis of decrypted DEX**
+Strings were extracted from `classes07.dex`. A hardcoded test server URL was found:
+```
+https://test02.jieliapp.com/health/2021/03/30/upgrade.zip
+```
+
+**Step 5 — Direct download**
+`upgrade.zip` was downloaded directly from the test server URL — no authentication required. The package contained the complete firmware image and all watch face resources.
 
 ### OTA Delivery Chain
 
 ```
-FunDo Health App
-  └─ JLOtaController
-       └─ JieLi Health Server (test03.jieliapp.com)
-            └─ POST /health/v1/api/watch/ota/version/newbypidvid
-                 └─ upgrade.zip  (download URL returned in response)
+Real phone + ADB logcat
+  └─ Captured signed FOTA API request
+       └─ Sign algorithm not fully reversible → dead end
+
+LDPlayer emulator + Frida
+  └─ frida-dexdump → 12 decrypted DEX files (44 MB)
+       └─ classes07.dex → hardcoded test URL found
+            └─ https://test02.jieliapp.com/health/2021/03/30/upgrade.zip
+                 └─ Direct download → upgrade.zip (no auth required)
 ```
 
 ### OTA Request Parameters
@@ -540,6 +562,10 @@ The JL7012F6 is confirmed to be the same silicon as AC7012 / AC701 family. The c
 | GZHXXY/6.12_test (UITools) | https://github.com/GZHXXY/6.12_test/tree/master/cpu/br28/tools |
 | XDA JL7012 thread | https://xdaforums.com/t/hk89-hk26-smartwatch-and-maybe-other-watches-made-with-jl7012-cpu.4616517/ |
 | XDA Dial Studio thread | https://xdaforums.com/t/app-tool-open-source-watch-companion-watch-face-designer-for-jieli-hk89-jl7012-smartwatches-rebranded-clones.4790357/ |
+
+---
+
+*QW33 Fishing Mod Project — Personal research document*
 
 ---
 
