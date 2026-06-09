@@ -130,7 +130,7 @@ Real phone + ADB logcat
   └─ Captured signed FOTA API request
        └─ Sign algorithm not fully reversible → dead end
 
-LDPlayer emulator + Frida
+Real phone + Frida
   └─ frida-dexdump → 12 decrypted DEX files (44 MB)
        └─ classes07.dex → hardcoded test URL found
             └─ https://test02.jieliapp.com/health/2021/03/30/upgrade.zip
