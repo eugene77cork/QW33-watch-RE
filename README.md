@@ -36,7 +36,7 @@
 | App Version Code | 895 |
 | Platform Code | 2498 |
 | BLE Device Name | QW33 / QW33Audio |
-| BLE MAC | 7F:5B:5A:A9:58:BB |
+| BLE MAC | 7F:XX:5A:XX:58:XX |
 
 ---
 
